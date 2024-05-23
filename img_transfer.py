@@ -11,7 +11,8 @@ def find_md_img(md):
     images = re.findall("\\!\\[.*?\\]\\((.*?)\\)", md)
     images += re.findall('<img src="(.*?)"', md)
     images = [i for i in images if not re.match("((http(s?))|(ftp))://.*", i)]
-    print(f'共找到{len(images)}张本地图片')
+    print('{} images found'.format(len(images)))
+    #  *：解包操作符，将images列表元素分别通过print打印，并用换行符隔开，功能类似于遍历列表打印元素
     print(*images, sep='\n')
     return images
 
@@ -19,8 +20,9 @@ def find_md_img(md):
 async def upload_img(path):
     """上传图片"""
     name = os.path.basename(path)
+    # 图像的后缀
     _, suffix = os.path.splitext(name)
-    print(f"正在上传{name}")
+    print("Uploading {}".format(name))
     with open(path, 'rb') as f:
         file = {
             "bits": f.read(),
@@ -33,6 +35,7 @@ async def upload_img(path):
 
 def replace_md_img(path, img_mapping):
     """替换markdown中的图片链接"""
+    # 这里不使用异常处理，因为在upload_markdown.py中一开始就使用了，如果读取文件出现异常，那么在这里肯定也会异常
     with open(path, 'r', encoding='utf-8') as fr:
         md = fr.read()
         for local, net in img_mapping.items():  # 替换图片链接
@@ -44,15 +47,20 @@ def replace_md_img(path, img_mapping):
                 img_url = re.findall("!\\[.*?\\]\\((.*?)\\)", ml)
                 img_url += re.findall('<img src="(.*?)"', ml)
                 img_url = img_url[0]
+
                 if conf["img_format"] == "typora":
                     zoom = re.findall(r'style="zoom:(.*)%;"', ml)
                     if zoom:
-                        md = md.replace(ml, f'<center><img src="{img_url}"  style="width:{zoom[0]}%;" /></center>')
+                        replacement = f'<center><img src="{img_url}"  style="width:{zoom[0]}%;" /></center>'
+                        md.replace(ml, replacement)
                 else:
-                    md = md.replace(ml, conf["img_format"].format(img_url))
+                    replacement = conf["img_format"].format(img_url)
+                    md.replace(ml, replacement)
+
         if conf["gen_network_file"]:
-            path_net = os.path.join(os.path.dirname(path), '_network'.join(os.path.splitext(os.path.basename(path))))
+            path_net = os.path.join(os.path.dirname(path),
+                                    '_network'.join(os.path.splitext(os.path.basename(path))))
             with open(path_net, 'w', encoding='utf-8') as fw:
                 fw.write(md)
-                print(f'图片链接替换完成，生成新markdown:{path_net}')
+                print('Images replacement success.')
         return md
