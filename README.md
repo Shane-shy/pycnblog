@@ -61,8 +61,7 @@
    ```shell
    #!/bin/bash
    
-   # 设置 Python 脚本的绝对路径
-   
+   # 设置upload_markdown.py的绝对路径
    PYTHON_SCRIPT_PATH=""
    
    # &> /dev/null：重定向并丢弃，避免将检测结果输出在终端，
@@ -115,7 +114,7 @@
    ```cmd
    @echo off
    
-   REM 设置 Python 脚本的绝对路径
+   REM 设置 upload_markdown.py的绝对路径
    set "PYTHON_SCRIPT_PATH=C:\path\to\your\script\upload_markdown.py"
    
    REM 检查是否安装了 Python
