@@ -78,6 +78,7 @@ if __name__ == '__main__':
             else:
                 for recent_post in recent_posts:
                     if title == html.unescape(recent_post['title']):
+                        print('update')
                         update_post = recent_post
                         update_post['description'] = md
                         # 博客更新时保留摘要、标签

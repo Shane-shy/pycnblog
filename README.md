@@ -6,10 +6,9 @@
 
 目前，仅支持上传至博客园的随笔。
 
-- 一键拖拽上传
 - 默认“未发布”，可选择直接发布
-- 重复上传，提示是否更新博客
-- 选择上传的分类
+- 重复上传，则更新博客
+- 选择上传的分类。所选择的分类不存在，则创建分类
 
 ## 环境配置
 
@@ -47,7 +46,7 @@
    # 图片自定义显示格式，默认不设置
    
    # 设置居中和宽度
-   # img_format: "<center><img src="{}" style="width:100%;" /></center>"
+   # img_format: "<center><img src="" style="width:100%;" /></center>"
    
    # 还原typora图片样式，居中，设置zoom，上传后无需再手动调整图片大小
    img_format: typora
@@ -174,4 +173,6 @@
 - Linux：`bash linux_upload_markdown.sh`，根据提示执行之后操作。`Please input file path:`时，可以直接将文件拖入命令行，就能生成绝对路径。**通过测试。**
 - windows：双击`win_upload_markdown.cmd`，之后同上。**注意：**Windows下输入路径需要加双引号。**目前没有测试。**
 - macos：应该类似于Linux，**目前没有测试。**
+
+**注意：**如果上传失败，留意终端的报错，并确保图片路径正确。
 
