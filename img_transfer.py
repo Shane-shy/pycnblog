@@ -8,9 +8,10 @@ from server_proxy import server
 
 def find_md_img(md):
     """查找markdown中的图片，排除网络图片(不用上传)"""
-    images = re.findall(r"!\[.*?\]\(.*\)", md)
-    images += re.findall(r'<img\s+[^>]*\bsrc\s*=\s*([\"\']([^\"\']+)[\"\'])[^>]*>', md)
-    images = [i for i in images if not re.match("((http(s?))|(ftp))://.*", i)]
+    # 获取图片非空链接。使用非贪婪匹配，不然(.+?)会匹配之后的全部
+    images = re.findall(r"!\[.*?\]\((.+?)\)", md)
+    images += re.findall(r'<img\s+[^>]*\bsrc\s*=\s*[\"\'](.+?)[\"\'][^>]*>', md)
+    images = [i for i in images if not re.match("((https?)|(ftp))://.*", i)]
     print('{} images found'.format(len(images)))
     #  *：解包操作符，将images列表元素分别通过print打印，并用换行符隔开，功能类似于遍历列表打印元素
     print(*images, sep='\n')
