@@ -64,6 +64,15 @@ if __name__ == '__main__':
             else:
                 print('No images to upload')
 
+            # 删除第一行大标题
+            if md and md[0].startswith("#"):
+                # 按行分割内容
+                md = md.splitlines()
+                # 删除第一行（大标题）
+                md = md[1:]
+                # 将剩余的行重新拼接为字符串
+                md = "\n".join(md)
+
             post = dict(description=md, title=title, categories=['[Markdown]'] + categories_ls)  # + 合并列表
             # 博客园的博文最大可获取数量为100
             recent_posts = server.metaWeblog.getRecentPosts(conf["blog_id"], conf["username"], conf["password"], 99)
