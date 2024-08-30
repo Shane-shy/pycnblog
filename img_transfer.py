@@ -9,7 +9,7 @@ from server_proxy import server
 def find_md_img(md):
     """查找markdown中的图片，排除网络图片(不用上传)"""
     # 获取图片非空链接。使用非贪婪匹配，不然(.+?)会匹配之后的全部
-    images = re.findall(r"!\[.*?\]\((.+?)\)", md)
+    images = re.findall(r"!\[.*?\]\((.+?)\)", md)  # 避免出现括号嵌套，否则无法识别
     images += re.findall(r'<img\s+[^>]*\bsrc\s*=\s*[\"\'](.+?)[\"\'][^>]*>', md)
     images = [i for i in images if not re.match("((https?)|(ftp))://.*", i)]
     print('{} images found'.format(len(images)))
