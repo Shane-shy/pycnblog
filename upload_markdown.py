@@ -1,13 +1,13 @@
 import asyncio
 import html
+import os
 import ssl
 import sys
 import xmlrpc.client
 
-import os
-from server_proxy import server
 from config_loader import conf
 from img_transfer import find_md_img, upload_img, replace_md_img
+from server_proxy import server
 
 if len(sys.argv) != 3:
     print('Input error')
@@ -15,11 +15,11 @@ if len(sys.argv) != 3:
     sys.exit(1)
 
 # markdown路径
-md_path = eval(sys.argv[1])
+md_path = sys.argv[1]
 # 如果输入的类别为空，则categories_ls为空列表
 categories_ls = sys.argv[2].split(' ') if len(sys.argv[2]) != 0 else []
 dir_path = os.path.dirname(md_path)
-title, _ = os.path.splitext(os.path.basename(md_path))  # 文件名作为博客标题
+title = None
 net_images = []  # 图片上传后url
 image_count = 0  # 图片计数
 
@@ -68,10 +68,15 @@ if __name__ == '__main__':
             if md and md[0].startswith("#"):
                 # 按行分割内容
                 md = md.splitlines()
+                title = md[0].lstrip("# ").rstrip()  # 第一行大标题作为博客标题。去掉开头的#和空格
                 # 删除第一行（大标题）
                 md = md[1:]
                 # 将剩余的行重新拼接为字符串
                 md = "\n".join(md)
+
+            if title is None:
+                print('No title')
+                sys.exit(1)
 
             post = dict(description=md, title=title, categories=['[Markdown]'] + categories_ls)  # + 合并列表
             # 博客园的博文最大可获取数量为100
