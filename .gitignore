@@ -1,7 +1,6 @@
-.idea/
-.git/
+.*
 __pycache__/
 config.yaml
 linux_upload_markdown.sh
 win_upload_markdown.cmd
-mac_upload_markdown
+mac_upload_markdown.sh
