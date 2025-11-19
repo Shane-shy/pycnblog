@@ -52,6 +52,7 @@ async def upload_tasks(local_images_):
 if __name__ == '__main__':
     cancel_ssh_authentication()
     try:
+        md_path=md_path.strip("\"' ") # 统一mac和linux的路径差异，处理首位的引号和空格
         with open(md_path, encoding='utf-8') as f:
             md = f.read()
             print('Reading markdown success: {}'.format(md_path))
