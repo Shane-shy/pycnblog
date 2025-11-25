@@ -16,6 +16,7 @@ if len(sys.argv) != 3:
 
 # markdown路径
 md_path = sys.argv[1]
+md_path = md_path.strip("\"' ")  # 统一mac和linux的路径差异，处理首位的引号和空格
 # 如果输入的类别为空，则categories_ls为空列表
 categories_ls = sys.argv[2].split(' ') if len(sys.argv[2]) != 0 else []
 dir_path = os.path.dirname(md_path)
@@ -52,12 +53,10 @@ async def upload_tasks(local_images_):
 if __name__ == '__main__':
     cancel_ssh_authentication()
     try:
-        md_path=md_path.strip("\"' ") # 统一mac和linux的路径差异，处理首位的引号和空格
         with open(md_path, encoding='utf-8') as f:
             md = f.read()
             print('Reading markdown success: {}'.format(md_path))
             local_images = find_md_img(md)
-
             if local_images:  # 有本地图片，异步上传
                 asyncio.run(upload_tasks(local_images))
                 image_mapping = dict(zip(local_images, net_images))
